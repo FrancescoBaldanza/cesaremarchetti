@@ -52,14 +52,10 @@ if (title) {
     const btnNext = document.querySelector(".gallery-arrow.next");
     if (!track || !viewport) return;
 
-    // 4 su desktop, 2 su "larghezza telefono"
-    const mqMobile = window.matchMedia("(max-width: 700px)");
-    function computeGroupSize() {
-        return mqMobile.matches ? 2 : 4;
-    }
-    let groupSize = computeGroupSize();
+    // *** Forza 4 immagini per facciata (sempre) ***
+    const groupSize = 4;
 
-    // Collezione iniziale e cloni per loop fluido
+    // Collezione iniziale e cloni per loop fluido (manteniamo il clone logic)
     const originalItems = Array.from(track.children);
     if (originalItems.length === 0) return;
     for (let i = 0; i < Math.min(groupSize, originalItems.length); i++) {
@@ -71,99 +67,28 @@ if (title) {
     let totalGroups = Math.ceil(originalItems.length / groupSize);
 
     function sizeItems() {
-        const gap = parseFloat(getComputedStyle(track).gap) || 0;
-        const vw = viewport.clientWidth;
-        const maxItemWidth = vw; // mai più largo della viewport
-        const itemW = Math.floor(
-            Math.min(maxItemWidth, (vw - gap * (groupSize - 1)) / groupSize)
-        );
+        const styles = getComputedStyle(track);
+        const gap = parseFloat(styles.gap) || 0;
+        // larghezza disponibile nella viewport della galleria
+        const available = viewport.clientWidth;
+        // calcolo item così 4 item + gap occupino esattamente la viewport
+        const itemW = Math.floor((available - gap * (groupSize - 1)) / groupSize);
+        // metto la dimensione per il CSS
         track.style.setProperty("--item-w", `${itemW}px`);
     }
 
-    function getStepWidth() {
-        const styles = getComputedStyle(track);
-        const gap = parseFloat(styles.gap) || 0;
-        const itemW = parseFloat(styles.getPropertyValue("--item-w")) || (viewport.clientWidth / groupSize);
-        // Scorriamo esattamente della larghezza di groupSize item + relativi gap
-        return Math.round(itemW * groupSize + gap * (groupSize - 1));
-    }
-
-    function setTransform() {
-        const shift = getStepWidth() * groupIndex;
-        track.style.transform = `translateX(-${shift}px)`;
-    }
-
-    function snapWithoutTransition(fn) {
-        const prev = track.style.transition;
-        track.style.transition = "none";
-        fn();
-        void track.offsetHeight; // forza reflow
-        track.style.transition = prev;
-    }
-
-    function nextGroup() {
-        groupIndex++;
-        setTransform();
-        const reachedClone = groupIndex >= totalGroups;
-        if (reachedClone) {
-            const transitionMs = 600;
-            setTimeout(() => {
-                snapWithoutTransition(() => {
-                    groupIndex = 0;
-                    setTransform();
-                });
-            }, transitionMs + 50);
-        }
-    }
-
-    function prevGroup() {
-        if (groupIndex === 0) {
-            snapWithoutTransition(() => {
-                groupIndex = totalGroups - 1;
-                setTransform();
-            });
-        } else {
-            groupIndex--;
-            setTransform();
-        }
-    }
-
-    // Avvio: misuro e posiziono
-    sizeItems();
-    setTransform();
-
-    // Autoplay controllato
-    let timer = null;
-    function startAuto() {
-        if (timer) return;
-        timer = setInterval(nextGroup, 3000);
-    }
-    function stopAuto() {
-        if (!timer) return;
-        clearInterval(timer);
-        timer = null;
-    }
-    startAuto();
-
-    // Resize o cambio media query: aggiorna groupSize, totalGroups e dimensioni
     function reflowForLayoutChange() {
-        const prevGroupSize = groupSize;
-        groupSize = computeGroupSize();
-        if (groupSize !== prevGroupSize) {
-            totalGroups = Math.ceil(originalItems.length / groupSize);
-            if (groupIndex >= totalGroups) groupIndex = Math.max(0, totalGroups - 1);
-        }
+        // groupSize è fisso; ricalcola gruppi e posizione
+        totalGroups = Math.ceil(originalItems.length / groupSize);
+        if (groupIndex >= totalGroups) groupIndex = Math.max(0, totalGroups - 1);
         snapWithoutTransition(() => {
             sizeItems();
             setTransform();
         });
     }
+
+    // resize: ricalcola larghezze e ri-posiziona
     window.addEventListener("resize", reflowForLayoutChange);
-    if (mqMobile.addEventListener) {
-        mqMobile.addEventListener("change", reflowForLayoutChange);
-    } else {
-        mqMobile.addListener(reflowForLayoutChange); // fallback
-    }
 
     // Pausa su hover su viewport e frecce
     viewport.addEventListener("mouseenter", stopAuto);

@@ -45,6 +45,12 @@ html, body {
 }
 
 /* Layout generale */
+/* Piccola protezione per non far scorrere orizzontalmente il body */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     background: var(--bg);
     line-height: 1.65;
@@ -54,12 +60,18 @@ body {
     overflow-x: hidden; /* evita scorrimento orizzontale e spostamenti */
 }
 
+/* --- Margine tra bordo finestra e contenuto --- */
 .container {
     max-width: 960px;
-    width: 100%;              /* aggiunto */
+    width: 100%;
     margin: 0 auto;
-    padding: 20px;
-    box-sizing: border-box;   /* aggiunto */
+    padding: 32px;            /* <-- più margine dai bordi della finestra */
+    box-sizing: border-box;
+}
+
+/* riduci padding su mobile per non rubare spazio */
+@media (max-width: 700px) {
+    .container { padding: 18px; }
 }
 
 /* Header – regolo dorato */
@@ -144,11 +156,16 @@ body {
 
 
 /* Rinominato intro-text -> bio */
-.bio {
+/* --- Biografia: testo giustificato --- */
+.bio,
+.bio p {
     font-size: 1.08rem;
-    max-width: none; /* usa tutta la larghezza disponibile */
+    max-width: none;
     width: auto;
-    overflow-wrap: anywhere; /* evita che parole lunghissime spingano fuori il box */
+    overflow-wrap: anywhere; /* evita che parole lunghe rompano il layout */
+    text-align: justify;          /* <-- testo giustificato */
+    text-justify: inter-word;
+    hyphens: auto;                /* opzionale: usa sillabazione se supportata */
 }
 
 /* Fascia separatore con galleria (4 immagini per volta) */
@@ -177,6 +194,7 @@ body {
 .gallery-separator::before { top: 0; }
 .gallery-separator::after { bottom: 0; }
 
+/* --- Galleria: layout che mostra esattamente 4 immagini per facciata --- */
 .gallery-viewport {
     position: relative;
     overflow: hidden;
@@ -187,16 +205,18 @@ body {
 .gallery-track {
     display: flex;
     gap: 12px;
-    height: 100%; /* ancorata alla viewport per dare riferimento ai figli */
-    align-items: stretch; /* i figli si allungano in altezza senza distorsioni */
+    height: 100%;
+    align-items: stretch;      /* i figli si allungano in altezza senza distorsioni */
     will-change: transform;
     transition: transform 600ms ease;
 }
 
+/* Qui è fondamentale usare la variabile --item-w calcolata da JS */
 .gallery-item {
-    flex: 0 0 auto;           /* cambiato: niente var(--item-w) fissa */
-    max-width: 100%;          /* aggiunto */
-    height: auto;             /* aggiunto */
+    flex: 0 0 var(--item-w);   /* larghezza fissa pari a var(--item-w) */
+    width: var(--item-w);
+    height: 100%;              /* riempie l'altezza della viewport della galleria */
+    object-fit: cover;         /* importante per mantenere proporzioni delle img */
     border-radius: 10px;
     border: 1px solid rgba(191,166,107,0.65);
     box-shadow: 0 6px 14px rgba(0,0,0,0.08);
