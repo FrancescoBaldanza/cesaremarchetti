@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maestro Cesare Marchetti - Clarinetto</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <h1 class="title">Mo. Cesare Marchetti</h1>
+        <p class="subtitle">Professore d'orchestra di Clarinetto</p>
+    </div>
+</header>
+
+<main class="main-content container">
+    <section class="intro">
+        <img src="images/cesso.png" alt="Foto del Professore" class="profile-pic" />
+        <div class="bio">
+            <noscript>Abilita JavaScript per visualizzare il testo della biografia.</noscript>
+        </div>
+
+        <!-- Separatore con galleria scorrevole (4 immagini per volta) -->
+        <div class="gallery-separator" aria-label="Galleria fotografica">
+            <div class="gallery-viewport">
+                <button class="gallery-arrow prev" type="button" aria-label="Immagini precedenti">‹</button>
+                <div class="gallery-track">
+                    <img src="images/fattanza.png" alt="img 1" class="gallery-item" />
+                    <img src="images/mentore.png" alt="img 2" class="gallery-item" />
+                    <img src="images/cesso.png" alt="img 3" class="gallery-item" />
+                    <img src="images/naso.png" alt="img 4" class="gallery-item" />
+                    <img src="images/nostalgia.png" alt="img 5" class="gallery-item" />
+                    <img src="images/rotto.png" alt="img 6" class="gallery-item" />
+                    <img src="images/soccia.png" alt="img 7" class="gallery-item" />
+                    <img src="images/sonno.png" alt="img 8" class="gallery-item" />
+                </div>
+                <button class="gallery-arrow next" type="button" aria-label="Immagini successive">›</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container footer-container">
+        <div class="contact-info">
+            <p>Contatti:</p>
+            <ul>
+                <li>Email: <a href="mailto:cesaremarchetti09@gmail.com">cesaremarchetti09@gmail.com</a></li>
+                <li>Telefono: <a href="tel:+393494059929">+39 349 4059929</a></li>
+                <li>
+                    Social:
+                    <a href="https://www.linkedin.com/in/cesare-marchetti-9845841b4 " aria-label="LinkedIn">LinkedIn</a> |
+                    <a href="https://www.facebook.com/cesare.marchettiacq/" aria-label="Facebook">Facebook</a> |
+                    <a href="https://www.instagram.com/cesaremarchetti_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=='" aria-label="Instagram">Instagram</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<!-- Lightbox per anteprima immagini -->
+<div id="lightbox" class="lightbox" aria-hidden="true">
+    <button class="lightbox-close" aria-label="Chiudi anteprima">×</button>
+    <img class="lightbox-image" alt="" />
+</div>
+
+<script src="js/main.js"></script>
+</body>
+</html>

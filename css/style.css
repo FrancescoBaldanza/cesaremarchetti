@@ -1,0 +1,316 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap");
+
+/* Variabili tema "classico" */
+:root {
+    --bg: #f9f6ef;
+    --text: #2b2119;
+
+    --wood-dark: #3a271c;
+    --wood: #4a2f25;
+
+    --burgundy: #651a28;
+    --gold: #bfa66b;
+    --gold-strong: #c8ad75;
+    --gold-soft: #e8dcc0;
+    --gold-bright: #f1d98a;
+
+    --muted: #7a6a5a;
+
+    /* Footer più acceso e regale */
+    --royal-burgundy-1: #7b1622;
+    --royal-burgundy-2: #a12c3c;
+
+    --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --font-sans: "Source Sans 3", -apple-system, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+
+    /* Nuova variabile per l'“isola” e footer */
+    --island-bg: #ffffff;
+
+    /* Altezza fissa per la galleria */
+    --gallery-h: 220px;
+}
+
+/* Reset base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-sans);
+    color: var(--text);
+}
+
+/* Layout generale */
+body {
+    background: var(--bg);
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden; /* evita scorrimento orizzontale e spostamenti */
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header – regolo dorato */
+.header {
+    background-color: var(--bg);
+    color: inherit;
+    padding: 36px 0 28px;
+    text-align: center;
+    box-shadow: none;
+    position: relative;
+}
+
+.header::after {
+    content: "";
+    display: block;
+    height: 2px;
+    margin-top: 18px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--gold) 20%,
+        var(--gold-strong) 50%,
+        var(--gold) 80%,
+        transparent 100%);
+    opacity: 0.9;
+}
+
+.title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--wood-dark);
+    text-shadow: none;
+    font-variant-ligatures: common_ligatures;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* Main */
+.main-content {
+    flex-grow: 1;
+    padding: 48px 0;
+}
+
+/* BOX “ISOLA” per immagine + bio */
+.intro {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+
+    background: var(--island-bg);
+    padding: 28px;
+    border-radius: 16px;
+    border: 1px solid rgba(191,166,107,0.28);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.profile-pic {
+    width: 280px;
+    border-radius: 12px;
+    border: 2px solid rgba(191,166,107,0.6);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+    object-fit: cover;
+}
+
+/* Rinominato intro-text -> bio */
+.bio {
+    flex: 1;
+    font-size: 1.08rem;
+    max-width: 560px;
+}
+
+/* Fascia separatore con galleria (4 immagini per volta) */
+.gallery-separator {
+    position: relative;
+    flex: 0 0 100%; /* occupa tutta la larghezza sotto al contenuto */
+    margin-top: 28px;
+    padding: 14px 0;
+}
+
+.gallery-separator::before,
+.gallery-separator::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        var(--gold) 20%,
+        var(--gold-strong) 50%,
+        var(--gold) 80%,
+        transparent 100%);
+    opacity: 0.95;
+}
+
+.gallery-separator::before { top: 0; }
+.gallery-separator::after { bottom: 0; }
+
+.gallery-viewport {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: var(--gallery-h);
+}
+
+.gallery-track {
+    display: flex;
+    gap: 12px;
+    height: 100%; /* ancorata alla viewport per dare riferimento ai figli */
+    align-items: stretch; /* i figli si allungano in altezza senza distorsioni */
+    will-change: transform;
+    transition: transform 600ms ease;
+}
+
+.gallery-item {
+    flex: 0 0 var(--item-w, 220px); /* larghezza imposta via JS, fallback sicuro */
+    width: var(--item-w, 220px);
+    height: 100%;
+    display: block;
+    object-fit: cover; /* riempie il box senza distorsioni, con taglio */
+    object-position: center; /* taglio centrato */
+    border-radius: 10px;
+    border: 1px solid rgba(191,166,107,0.65);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+    background: #ddd;
+}
+
+/* Frecce di navigazione galleria */
+.gallery-viewport .gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(191,166,107,0.5);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    color: var(--wood-dark);
+    font-size: 24px;
+    line-height: 38px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+    transition: transform 0.15s ease, background-color 0.15s ease;
+    user-select: none;
+}
+
+.gallery-viewport .gallery-arrow:hover,
+.gallery-viewport .gallery-arrow:focus {
+    background: var(--gold-soft);
+    transform: translateY(-50%) scale(1.06);
+    outline: none;
+}
+
+.gallery-viewport .gallery-arrow.prev { left: 6px; }
+.gallery-viewport .gallery-arrow.next { right: 6px; }
+
+/* Footer – stesso bianco dell'isola */
+.footer {
+    background: var(--island-bg);
+    padding: 22px 0;
+    border-top: 1px solid rgba(191,166,107,0.45);
+    color: inherit;
+    box-shadow: 0 -8px 20px rgba(0,0,0,0.04);
+}
+
+.footer-container {
+    display: flex;
+    justify-conitent: center;
+}
+
+/* Contatti: li oro, link grigio tenue con hover giallognolo */
+.contact-info ul {
+    list-style: none;
+    font-size: 1rem;
+    color: inherit;
+}
+
+.contact-info ul li {
+    color: var(--gold);
+    margin: 6px 0;
+}
+
+.contact-info a {
+    color: #8a8a8a; /* grigio appena leggibile */
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.contact-info a:hover,
+.contact-info a:focus {
+    color: var(--gold-bright); /* giallognolo */
+    text-shadow: 0 0 6px rgba(241, 217, 138, 0.8);
+}
+
+/* Lightbox (anteprima immagini) */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+.lightbox.open { display: flex; }
+.lightbox img.lightbox-image {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    border: 2px solid rgba(191,166,107,0.6);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+    background: #fff;
+}
+.lightbox .lightbox-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(191,166,107,0.5);
+    background: rgba(255,255,255,0.95);
+    color: var(--wood-dark);
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+}
+body.no-scroll { overflow: hidden; }
+
+/* Responsive */
+@media (max-width: 700px) {
+    .intro {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .bio {
+        max-width: 100%;
+    }
+
+    .profile-pic {
+        width: 200px;
+        margin: 0 auto;
+    }
+
+    .gallery-viewport {
+        height: 160px; /* spazio ridotto su mobile */
+    }
+}
