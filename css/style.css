@@ -1,5 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap");
 
+/* Evita overflow orizzontale globale */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 /* Variabili tema "classico" */
 :root {
     --bg: #f9f6ef;
@@ -51,8 +56,10 @@ body {
 
 .container {
     max-width: 960px;
+    width: 100%;              /* aggiunto */
     margin: 0 auto;
     padding: 20px;
+    box-sizing: border-box;   /* aggiunto */
 }
 
 /* Header – regolo dorato */
@@ -104,41 +111,52 @@ body {
     padding: 48px 0;
 }
 
-/* BOX “ISOLA” per immagine + bio */
 .intro {
-    display: flex;
-    align-items: center;
-    gap: 40px;
-    flex-wrap: wrap;
+    width: 100%;              /* confermato */
+    box-sizing: border-box;   /* aggiunto */
+}
+/*
+.intro {
+    display: block;
+    width: 100%;
 
     background: var(--island-bg);
     padding: 28px;
     border-radius: 16px;
     border: 1px solid rgba(191,166,107,0.28);
     box-shadow: 0 10px 24px rgba(0,0,0,0.08);
-}
+    overflow: hidden;
+}*/
+
 
 .profile-pic {
+    float: left;
     width: 280px;
+    max-width: 100%;          /* cambiato: prima era max-width: 45% */
+    margin: 0 24px 16px 0;
     border-radius: 12px;
     border: 2px solid rgba(191,166,107,0.6);
     box-shadow: 0 6px 16px rgba(0,0,0,0.08);
     object-fit: cover;
+    display: block;
+    height: auto;             /* aggiunto */
 }
+
 
 /* Rinominato intro-text -> bio */
 .bio {
-    flex: 1;
     font-size: 1.08rem;
-    max-width: 560px;
+    max-width: none; /* usa tutta la larghezza disponibile */
+    width: auto;
+    overflow-wrap: anywhere; /* evita che parole lunghissime spingano fuori il box */
 }
 
 /* Fascia separatore con galleria (4 immagini per volta) */
 .gallery-separator {
     position: relative;
-    flex: 0 0 100%; /* occupa tutta la larghezza sotto al contenuto */
     margin-top: 28px;
     padding: 14px 0;
+    clear: both; /* inizia sotto all'immagine flottante */
 }
 
 .gallery-separator::before,
@@ -176,12 +194,9 @@ body {
 }
 
 .gallery-item {
-    flex: 0 0 var(--item-w, 220px); /* larghezza imposta via JS, fallback sicuro */
-    width: var(--item-w, 220px);
-    height: 100%;
-    display: block;
-    object-fit: cover; /* riempie il box senza distorsioni, con taglio */
-    object-position: center; /* taglio centrato */
+    flex: 0 0 auto;           /* cambiato: niente var(--item-w) fissa */
+    max-width: 100%;          /* aggiunto */
+    height: auto;             /* aggiunto */
     border-radius: 10px;
     border: 1px solid rgba(191,166,107,0.65);
     box-shadow: 0 6px 14px rgba(0,0,0,0.08);
@@ -295,9 +310,22 @@ body {
 body.no-scroll { overflow: hidden; }
 
 /* Responsive */
+@media (max-width: 900px) {
+    .intro {
+        text-align: center;
+    }
+
+    .profile-pic {
+        float: none;
+        max-width: 60%;
+        width: min(260px, 60%);
+        display: block;
+        margin: 0 auto 16px;
+    }
+}
+
 @media (max-width: 700px) {
     .intro {
-        flex-direction: column;
         text-align: center;
     }
 
@@ -306,8 +334,11 @@ body.no-scroll { overflow: hidden; }
     }
 
     .profile-pic {
+        float: none;
         width: 200px;
-        margin: 0 auto;
+        max-width: 100%;
+        display: block;
+        margin: 0 auto 16px;
     }
 
     .gallery-viewport {
